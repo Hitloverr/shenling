@@ -1,3 +1,7 @@
+import { TOKEN_KEY } from '../constants/token_key'
+
+PersistentStorage.PersistProp(TOKEN_KEY,"");
+
 @Entry
 @Component
 struct Index {

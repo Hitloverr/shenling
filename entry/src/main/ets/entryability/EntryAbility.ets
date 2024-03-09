@@ -36,16 +36,13 @@ export default class EntryAbility extends UIAbility {
     if (adSetting.showAd) {
       windowStage.loadContent('pages/start/Start');
     } else {
-      windowStage.loadContent('pages/Index')
-    }
-
-    windowStage.loadContent('pages/Index', (err, data) => {
-      if (err.code) {
-        hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
-        return;
+      const token = userSetting.getUserToken();
+      if (token) {
+        windowStage.loadContent('pages/Index')
+      } else {
+        windowStage.loadContent('pages/Login/Login')
       }
-      hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
-    });
+    }
   }
 
   onWindowStageDestroy() {

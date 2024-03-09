@@ -1,6 +1,9 @@
 import { Advert } from '../../models'
 import { UserSettingClass } from '../../utils'
 import router from '@ohos.router'
+import { TOKEN_KEY } from '../../constants/token_key'
+
+PersistentStorage.PersistProp(TOKEN_KEY,"");
 
 @Entry
 @Component
@@ -18,7 +21,7 @@ struct Start {
     this.timer = setInterval(() => {
       if(this.adObj.adTime === 0) {
         clearInterval(this.timer)
-        router.replaceUrl({ url: 'pages/Index' })
+        this.toNext();
         return
       }
       this.adObj.adTime--
@@ -27,6 +30,20 @@ struct Start {
   aboutToDisappear() {
     clearInterval(this.timer)
   }
+
+  private toNext() {
+    const token = this.userSetting.getUserToken();
+    if (token) {
+      router.replaceUrl({
+        url: 'pages/Index'
+      })
+    } else {
+      router.replaceUrl({
+        url: 'pages/Login/Login'
+      })
+    }
+  }
+
   build() {
     Stack({ alignContent: Alignment.TopEnd }) {
       Image(this.adObj.adImage).objectFit(ImageFit.Cover)
@@ -39,7 +56,7 @@ struct Start {
         .backgroundColor($r('app.color.background_page'))
         .textAlign(TextAlign.Center)
         .onClick(() => {
-          router.replaceUrl({ url: 'pages/Index' })
+          this.toNext();
         })
 
     }.height('100%').width('100%')
